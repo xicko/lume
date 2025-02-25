@@ -1,0 +1,124 @@
+name: lume
+description: "Let your love shine."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get: ^4.6.6
+  supabase_flutter: ^2.8.2
+  url_launcher: ^6.3.1
+  flutter_launcher_icons: ^0.14.2
+  infinite_scroll_pagination: ^4.1.0
+  flutter_dotenv: ^5.2.1
+  intl: ^0.19.0
+  font_awesome_flutter: ^10.8.0
+  path_provider: ^2.0.11
+  json_serializable: ^6.1.4
+  permission_handler: ^11.3.1
+  device_info_plus: ^11.2.0
+  connectivity_plus: ^6.1.1
+  share_plus: ^10.1.4
+  flutter_keyboard_visibility: ^6.0.0
+  flutter_slidable: ^4.0.0
+  flutter_svg: ^2.0.17
+  image_picker: ^1.1.2
+  image: ^4.5.2
+  flutter_native_splash: ^2.4.4
+  image_cropper: ^9.0.0
+  flutter_card_swiper: ^7.0.2
+  geolocator: ^13.0.2
+  rive: ^0.13.20
+  get_storage: ^2.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+  - assets/fonts/
+  - assets/visuals/
+  - assets/svg/
+  - assets/anim/
+  - assets/icon/lumeico.png
+  - assets/lumetransparent.png
+  - assets/lumew.png
+  - assets/lumeb.png
+  - assets/me.jpg
+  - assets/avatar.png
+  - assets/remove.png
+  - assets/null.png
+
+  fonts:
+    - family: 'Plus Jakarta Sans'
+      fonts:
+        - asset: assets/fonts/PJS/PlusJakartaSans-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/PJS/PlusJakartaSans-ExtraLightItalic.ttf
+          weight: 200
+          style: italic
+
+        - asset: assets/fonts/PJS/PlusJakartaSans-Light.ttf
+          weight: 300
+        - asset: assets/fonts/PJS/PlusJakartaSans-LightItalic.ttf
+          weight: 300
+          style: italic
+
+        - asset: assets/fonts/PJS/PlusJakartaSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/PJS/PlusJakartaSans-Italic.ttf
+          weight: 400
+          style: italic
+
+        - asset: assets/fonts/PJS/PlusJakartaSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/PJS/PlusJakartaSans-MediumItalic.ttf
+          weight: 500
+          style: italic
+
+        - asset: assets/fonts/PJS/PlusJakartaSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/PJS/PlusJakartaSans-SemiBoldItalic.ttf
+          weight: 600
+          style: italic
+
+        - asset: assets/fonts/PJS/PlusJakartaSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/PJS/PlusJakartaSans-BoldItalic.ttf
+          weight: 700
+          style: italic
+
+        - asset: assets/fonts/PJS/PlusJakartaSans-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/PJS/PlusJakartaSans-ExtraBoldItalic.ttf
+          weight: 800
+          style: italic
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/icon/lumeico.png"
+  adaptive_icon_foreground: "assets/icon/lumeico.png"
+  adaptive_icon_background: "#ffffff"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/icon/lumeico.png"
+    background_color: "#ffffff"
+    theme_color: "#3f51b5"
+  windows:
+    generate: true
+    image_path: "assets/icon/lumeico.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/icon/lumeico.png"
