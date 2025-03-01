@@ -73,11 +73,16 @@ class _ChatMessagesState extends State<ChatMessages> {
                   fit: BoxFit.cover,
                 ),
               ),
-              Text(
-                widget.name,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
+              Expanded(
+                child: Text(
+                  widget.name,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
             ],

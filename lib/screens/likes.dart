@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lume/controllers/swipes_controller.dart';
 import 'package:lume/controllers/profile_controller.dart';
+import 'package:lume/widgets/refresh_button.dart';
 
 class Likes extends StatefulWidget {
   const Likes({super.key});
@@ -193,19 +194,9 @@ class _LikesState extends State<Likes> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text('No likes yet, but you can change that!'),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    elevation: 0,
-                                    shadowColor: Colors.transparent,
-                                    backgroundColor: Colors.grey[300],
-                                    foregroundColor: Colors.black,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
+                                RefreshButton(
                                   onPressed: () =>
                                       SwipesController.to.fetchLikes(),
-                                  child: Text('Refresh'),
                                 ),
                               ],
                             ),

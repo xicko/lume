@@ -27,13 +27,15 @@ Lume is a Flutter-based online dating application. The app is built with Supabas
 - **Account Management**: Update email, password, and notification preferences.
 
 ### Upcoming Features
-- Network detection for offline app handling
 - Fetch feed users based on max distance and age range
 - Discover page where users can find partners with mutual interests
 - Ability to delete profile info at any time
 - Add more profile info customization (E.g. interests, education, workplace, family plans, drinking habit, and more)
 - Ability to add more than 2 profile images, up to 9
 - Dark theme
+
+### Added Features
+- Network detection for offline app handling (3.1.2025)
 
 
 ## Project Setup
@@ -72,7 +74,7 @@ lib/
 ```
 
 ## Release Builds
-You can download the latest release APK for Taskify from the [GitHub Releases](https://github.com/xicko/taskify/releases).
+You can download the latest release APK for Taskify from the [GitHub Releases](https://github.com/xicko/lume/releases).
 
 ## Contributing
 Contributions are welcome! Please create an issue or submit a pull request for any bug fixes or new features.

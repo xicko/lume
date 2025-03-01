@@ -12,6 +12,7 @@ import 'package:lume/screens/feed.dart';
 import 'package:lume/screens/likes.dart';
 import 'package:lume/screens/profile.dart';
 import 'package:lume/screens/sub_screens/profile_setup.dart';
+import 'package:lume/widgets/refresh_button.dart';
 import 'package:lume/widgets/simple_appbar.dart';
 import 'package:rive/rive.dart';
 
@@ -76,66 +77,96 @@ class BaseScreenState extends State<BaseScreen> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => AuthController.to.isLoggedIn.value
-          ? ProfileSetupController.to.isProfileSet.value
-              ? Scaffold(
-                  // Avoid status bar
-                  appBar: AppBar(
-                    backgroundColor: Colors.white,
-                    title: SimpleAppbar(),
-                  ),
-                  body: Stack(
-                    children: [
-                      PageView(
-                        controller: BaseController.to.pageController,
-                        physics: BaseController.to.currentNavIndex.value == 0
-                            ? NeverScrollableScrollPhysics()
-                            : AlwaysScrollableScrollPhysics(),
-                        onPageChanged: (index) =>
-                            BaseController.to..currentNavIndex.value = index,
+      () => BaseController.to.hasNetwork.value
+          ? AuthController.to.isLoggedIn.value
+              ? ProfileSetupController.to.isProfileSet.value
+                  ? Scaffold(
+                      // Avoid status bar
+                      appBar: AppBar(
+                        backgroundColor: Colors.white,
+                        title: SimpleAppbar(),
+                      ),
+                      body: Stack(
                         children: [
-                          // Index 0
-                          Stack(
+                          PageView(
+                            controller: BaseController.to.pageController,
+                            physics:
+                                BaseController.to.currentNavIndex.value == 0
+                                    ? NeverScrollableScrollPhysics()
+                                    : AlwaysScrollableScrollPhysics(),
+                            onPageChanged: (index) => BaseController.to
+                              ..currentNavIndex.value = index,
                             children: [
-                              Feed(),
+                              // Index 0
+                              Stack(
+                                children: [
+                                  Feed(),
 
-                              // Match Anim
-                              Obx(
-                                () => Visibility(
-                                  visible: isMatchAnimPlaying.value,
-                                  child: IgnorePointer(
-                                    child: RiveAnimation.asset(
-                                      'assets/anim/match.riv',
-                                      controllers: [matchAnimController],
-                                      animations: ['match'],
+                                  // Match Anim
+                                  Obx(
+                                    () => Visibility(
+                                      visible: isMatchAnimPlaying.value,
+                                      child: IgnorePointer(
+                                        child: RiveAnimation.asset(
+                                          'assets/anim/match.riv',
+                                          controllers: [matchAnimController],
+                                          animations: ['match'],
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
+
+                              // Index 1
+                              Discover(),
+
+                              // Index 2
+                              Likes(),
+
+                              // Index 3
+                              Chats(),
+
+                              // Index 4
+                              Profile(),
                             ],
                           ),
 
-                          // Index 1
-                          Discover(),
-
-                          // Index 2
-                          Likes(),
-
-                          // Index 3
-                          Chats(),
-
-                          // Index 4
-                          Profile(),
+                          // Text(BaseController.to.showMe.value),
                         ],
                       ),
-
-                      // Text(BaseController.to.showMe.value),
-                    ],
-                  ),
-                  bottomNavigationBar: BottomNavBar(),
-                )
-              : ProfileSetup()
-          : AuthScreen(),
+                      bottomNavigationBar: BottomNavBar(),
+                    )
+                  : ProfileSetup()
+              : AuthScreen()
+          : Scaffold(
+              body: Center(
+                child: Column(
+                  spacing: 16,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.wifi_off,
+                      color: Colors.black,
+                      size: 36,
+                    ),
+                    Text(
+                      'No internet connection,\nplease check your network and try again.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    RefreshButton(
+                      onPressed: () => BaseController.to.checkInternet(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 }

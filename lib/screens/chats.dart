@@ -7,6 +7,7 @@ import 'package:lume/controllers/matches_controller.dart';
 import 'package:lume/controllers/messages_controller.dart';
 import 'package:lume/screens/sub_screens/chat_messages.dart';
 import 'package:lume/widgets/dialogs/unmatch_confirmation.dart';
+import 'package:lume/widgets/refresh_button.dart';
 
 class Chats extends StatefulWidget {
   const Chats({super.key});
@@ -199,19 +200,9 @@ class _ChatsState extends State<Chats> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text('No matches yet, but you can change that!'),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  elevation: 0,
-                                  shadowColor: Colors.transparent,
-                                  backgroundColor: Colors.grey[300],
-                                  foregroundColor: Colors.black,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
+                              RefreshButton(
                                 onPressed: () =>
                                     MatchesController.to.fetchMatches(),
-                                child: Text('Refresh'),
                               ),
                             ],
                           ),

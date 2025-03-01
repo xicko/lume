@@ -1,14 +1,25 @@
+import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:lume/controllers/auth_controller.dart';
 import 'package:lume/controllers/feed_controller.dart';
+import 'package:http/http.dart' as http;
+import 'package:lume/controllers/matches_controller.dart';
+import 'package:lume/controllers/profile_controller.dart';
+import 'package:lume/controllers/swipes_controller.dart';
 
 class BaseController extends GetxController with WidgetsBindingObserver {
   static BaseController get to => Get.find();
   final GetStorage settingsStorage = GetStorage();
+
+  // Network status
+  RxBool hasNetwork = true.obs;
+  RxList<ConnectivityResult> connectionStatus = [ConnectivityResult.none].obs;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
   // Track keyboard state
   RxBool isKeyboardVisible = false.obs;
@@ -23,7 +34,6 @@ class BaseController extends GetxController with WidgetsBindingObserver {
   PageController pageController = PageController();
   void changeNavIndex(int index) {
     currentNavIndex.value = index;
-    // AuthController.to.reloadAuthState();
     pageController.animateToPage(index,
         duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
 
@@ -36,6 +46,18 @@ class BaseController extends GetxController with WidgetsBindingObserver {
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
 
+    // Network check
+    initConnectivity();
+
+    // Network listener
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen((result) {
+      if (result != connectionStatus) {
+        updateConnectionStatus(result);
+      }
+    });
+
+    // Load app settings
     loadSettings();
   }
 
@@ -64,20 +86,64 @@ class BaseController extends GetxController with WidgetsBindingObserver {
     debugPrint('App settings loaded');
   }
 
-  void updateMaxDistance(int value) {
-    maxDistance.value = value;
-    settingsStorage.write('maxDistance', value);
+  Future<void> initConnectivity() async {
+    late List<ConnectivityResult> res;
+
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      res = await _connectivity.checkConnectivity();
+      debugPrint('checked connectivity status');
+    } on PlatformException catch (e) {
+      debugPrint('Couldn\'t check connectivity status $e');
+      return;
+    }
+
+    connectionStatus.value = res;
   }
 
-  void updateAgeRange(RangeValues values) {
-    ageRange.value = values;
-    settingsStorage.write('rangeStart', values.start);
-    settingsStorage.write('rangeEnd', values.end);
+  Future<void> updateConnectionStatus(List<ConnectivityResult> result) async {
+    connectionStatus.value = result;
+
+    currentNavIndex.value = 0;
+
+    if (connectionStatus.contains(ConnectivityResult.wifi) ||
+        connectionStatus.contains(ConnectivityResult.mobile) ||
+        connectionStatus.contains(ConnectivityResult.ethernet) ||
+        connectionStatus.contains(ConnectivityResult.vpn)) {
+      // Check internet with http request
+      hasNetwork.value = await checkInternet();
+    } else {
+      hasNetwork.value = false;
+    }
+
+    debugPrint('Connectivity changed: $connectionStatus');
   }
 
-  void updateShowMe(String value) {
-    showMe.value = value;
-    settingsStorage.write('showMe', value);
+  // HTTP Request to check actual internet connectivity
+  Future<bool> checkInternet() async {
+    try {
+      final res = await http
+          .get(Uri.parse('http://www.google.com'))
+          .timeout(const Duration(seconds: 4));
+
+      if (res.statusCode == 200) {
+        debugPrint("Internet check: Success");
+
+        // Manually fetch everything when network comes
+        // These are usually auto fetched at app startup
+        manualFetchAll();
+        // TODO
+        // Causing double fetch if user already had connection upon opening app, will fix later
+
+        return true;
+      } else {
+        debugPrint("Internet check: Failed - Status Code: ${res.statusCode}");
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Internet check: Error - $e");
+      return false;
+    }
   }
 
   // Getx Snackbar
@@ -142,5 +208,29 @@ class BaseController extends GetxController with WidgetsBindingObserver {
     }
     // Return an empty list if newBase64 is empty
     return Uint8List(0);
+  }
+
+  void updateMaxDistance(int value) {
+    maxDistance.value = value;
+    settingsStorage.write('maxDistance', value);
+  }
+
+  void updateAgeRange(RangeValues values) {
+    ageRange.value = values;
+    settingsStorage.write('rangeStart', values.start);
+    settingsStorage.write('rangeEnd', values.end);
+  }
+
+  void updateShowMe(String value) {
+    showMe.value = value;
+    settingsStorage.write('showMe', value);
+  }
+
+  void manualFetchAll() async {
+    await ProfileController.to.fetchUserInfo();
+    FeedController.to.fetchFeed();
+    SwipesController.to.fetchLikes();
+    MatchesController.to.fetchMatches();
+    ProfileController.to.updateLocation();
   }
 }
