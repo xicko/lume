@@ -70,8 +70,9 @@ class BaseScreenState extends State<BaseScreen> {
 
   @override
   void dispose() {
-    super.dispose();
     matchAnimController.dispose();
+
+    super.dispose();
   }
 
   @override

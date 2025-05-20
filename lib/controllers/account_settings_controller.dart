@@ -42,8 +42,9 @@ class AccountSettingsController extends GetxController {
 
   @override
   void onClose() {
-    super.onClose();
     emailController.dispose();
+
+    super.onClose();
   }
 
   Future<void> updateEmail() async {

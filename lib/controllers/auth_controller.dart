@@ -75,7 +75,6 @@ class AuthController extends GetxController {
 
   @override
   void onClose() {
-    super.onClose();
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
@@ -83,6 +82,8 @@ class AuthController extends GetxController {
     emailFN.dispose();
     passwordFN.dispose();
     confirmPasswordController.dispose();
+
+    super.onClose();
   }
 
   Future<void> initAuth() async {

@@ -28,8 +28,9 @@ class EditProfileController extends GetxController {
 
   @override
   void onClose() {
-    super.onClose();
     bioEditController.dispose();
+
+    super.onClose();
   }
 
   Future<void> updateProfileInfo() async {

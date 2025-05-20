@@ -63,7 +63,6 @@ class _AccountSettingsState extends State<AccountSettings> {
 
   @override
   void dispose() {
-    super.dispose();
     currentPasswordFN.dispose();
     newPasswordFN.dispose();
     confirmPasswordFN.dispose();
@@ -75,6 +74,8 @@ class _AccountSettingsState extends State<AccountSettings> {
 
     AccountSettingsController.to.isEmailChangeSent.value = false;
     AccountSettingsController.to.isPasswordUpdated.value = false;
+
+    super.dispose();
   }
 
   @override
