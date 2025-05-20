@@ -52,6 +52,7 @@ class _ChatMessagesState extends State<ChatMessages> {
   @override
   void dispose() {
     timer?.cancel();
+    
     super.dispose();
   }
 

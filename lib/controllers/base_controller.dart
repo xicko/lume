@@ -63,8 +63,9 @@ class BaseController extends GetxController with WidgetsBindingObserver {
 
   @override
   void onClose() {
-    super.dispose();
     WidgetsBinding.instance.removeObserver(this);
+
+    super.dispose();
   }
 
   @override
